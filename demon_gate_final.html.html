@@ -1,0 +1,249 @@
+<!-- Created and designed by Ritesh Kale | © 2025 All Rights Reserved -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demon's Gate — Awaken</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nosifer&family=Unbounded:wght@300;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1: #0b0010;
+      --purple: #d500f9;
+      --crimson: #dc143c;
+      --glow: 0 0 28px rgba(213,0,249,0.18);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Unbounded',system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background: radial-gradient(circle at 20% 20%, rgba(163,78,239,0.06), transparent 20%),
+                  radial-gradient(circle at 80% 80%, rgba(220,20,60,0.04), transparent 20%),
+                  linear-gradient(180deg,#040006 0%, #0b0010 60%, #12000a 100%);
+      color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+
+    /* animated smoke */
+    .background-smoke{
+      position:fixed;inset:0;z-index:0;
+      background: radial-gradient(circle at 25% 25%, rgba(186,85,211,0.16), transparent 18%),
+                  radial-gradient(circle at 75% 75%, rgba(220,20,60,0.12), transparent 18%);
+      background-size:220% 220%;
+      animation: smokeMove 18s ease-in-out infinite;
+      filter: blur(40px) saturate(1.05);
+      pointer-events:none;
+    }
+    @keyframes smokeMove{0%{background-position:0 0}50%{background-position:100% 100%}100%{background-position:0 0}}
+
+    .card{
+      position:relative;z-index:3;
+      width:clamp(320px,86%,520px);
+      padding:28px;border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.48));
+      border:1px solid rgba(213,0,249,0.06);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6), var(--glow);
+      backdrop-filter: blur(6px);
+      text-align:center;
+      overflow:hidden;
+    }
+
+    /* rotating sigil */
+    .sigil{
+      position:absolute;top:-70px;left:50%;transform:translateX(-50%);
+      width:280px;height:280px;z-index:1;opacity:0.22;
+      animation: rotateSigil 20s linear infinite;
+      filter: drop-shadow(0 12px 30px rgba(160,50,200,0.12));
+    }
+    @keyframes rotateSigil{to{transform:translateX(-50%) rotate(1turn)}}
+
+    h1{
+      font-family:'Nosifer',cursive; font-size:2.2rem; color:var(--purple);
+      text-shadow: 0 0 20px rgba(213,0,249,0.85);
+      margin-top:40px; position:relative; z-index:2;
+    }
+    p.lead{color:#f0d6f6; margin:12px 0 18px; z-index:2; position:relative}
+
+    .form{
+      display:flex;flex-direction:column;gap:12px;align-items:center;z-index:2;position:relative;
+    }
+    input{
+      width:88%;padding:12px 14px;border-radius:10px;border:1px solid rgba(213,0,249,0.12);
+      background:rgba(255,255,255,0.02);color:#fff;font-size:15px;outline:none;
+      box-shadow: inset 0 -4px 12px rgba(0,0,0,0.4);
+      transition: box-shadow .15s, transform .12s;
+    }
+    input:focus{box-shadow:0 12px 30px rgba(213,0,249,0.08);transform:translateY(-2px)}
+
+    .btn{
+      width:92%;padding:12px;border-radius:10px;border:none;cursor:pointer;
+      background:linear-gradient(90deg,var(--purple),var(--crimson));color:#120202;font-weight:800;
+      box-shadow:0 10px 30px rgba(220,20,60,0.12);font-size:15px;letter-spacing:0.6px;
+      transition: transform .12s ease, box-shadow .12s ease;
+      position:relative;overflow:hidden;
+    }
+    .btn:active{transform:translateY(2px)}
+    .btnGlow{ box-shadow: 0 10px 40px rgba(213,0,249,0.28), 0 0 60px rgba(220,20,60,0.12); transform: scale(1.02); }
+
+    /* ripple flash on awaken */
+    .flash{
+      position:absolute; inset:0; z-index:4; pointer-events:none;
+      background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.12), transparent 30%);
+      opacity:0; transition: opacity .32s ease;
+    }
+    .flash.show{ opacity:1; animation: flashFade .6s ease forwards; }
+    @keyframes flashFade{0%{opacity:1}100%{opacity:0}}
+
+    /* footer credit */
+    .footer{ margin-top:14px; font-size:0.9rem; color:#ddd; opacity:0.95; z-index:2; position:relative }
+    .credit{ color:#ffb3ff; font-weight:700; text-shadow:0 0 12px rgba(213,0,249,0.5); }
+    .credit.glow{ text-shadow: 0 0 18px rgba(213,0,249,0.9); animation:creditPulse 2.4s ease-in-out infinite; }
+    @keyframes creditPulse{0%{opacity:0.9}50%{opacity:1}100%{opacity:0.9}}
+
+    /* small responsive tweaks */
+    @media(max-width:480px){
+      h1{font-size:1.6rem;margin-top:20px}
+      .sigil{width:200px;height:200px;top:-48px;opacity:0.18}
+      .card{padding:18px;border-radius:12px}
+    }
+  </style>
+</head>
+<body>
+  <div class="background-smoke" aria-hidden="true"></div>
+
+  <main class="card" role="main" aria-labelledby="title">
+    <svg class="sigil" viewBox="0 0 200 200" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1">
+          <stop offset="0" stop-color="#d500f9"/><stop offset="1" stop-color="#ff1493"/>
+        </linearGradient>
+      </defs>
+      <circle cx="100" cy="100" r="78" stroke="url(#g1)" stroke-width="3" fill="none"/>
+      <g stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round">
+        <path d="M100 30 L130 100 L100 170 L70 100 Z" />
+        <path d="M100 50 L140 70 M100 150 L140 130 M100 50 L60 70 M100 150 L60 130" opacity="0.8"/>
+      </g>
+      <circle cx="100" cy="100" r="8" fill="#ff33ff" opacity="0.95"/>
+    </svg>
+
+    <div class="flash" id="flash"></div>
+
+    <h1 id="title">Demon's Gate</h1>
+    <p class="lead">Break the seal. Enter your name and the sigil phrase to awaken the demon form.</p>
+
+    <form id="loginForm" class="form" autocomplete="off" spellcheck="false">
+      <input id="iname" name="iname" placeholder="Enter your name" required />
+      <input id="iphrase" name="iphrase" type="password" placeholder="Sigil phrase (secret)" required />
+      <button id="awaken" class="btn" type="submit" aria-label="Awaken Demon Form">Awaken Demon Form</button>
+    </form>
+
+    <div class="footer">Created by <span id="credit" class="credit">Ritesh Kale</span> — Unauthorized edits break the seal ⚡</div>
+  </main>
+
+  <script>
+    // Prevent accidental form navigation
+    const form = document.getElementById('loginForm');
+    const awaken = document.getElementById('awaken');
+    const flash = document.getElementById('flash');
+    const credit = document.getElementById('credit');
+    let audioCtx;
+
+    // create small sound: choose deep hum + harmonic for mystic feel
+    function playAwakenSound(){
+      try{
+        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+
+        // low base
+        const osc1 = audioCtx.createOscillator();
+        const g1 = audioCtx.createGain();
+        osc1.type = 'sine'; osc1.frequency.setValueAtTime(110, now); // low hum
+        g1.gain.setValueAtTime(0.0001, now);
+        g1.gain.linearRampToValueAtTime(0.18, now + 0.02);
+        g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+        osc1.connect(g1); g1.connect(audioCtx.destination);
+        osc1.start(now); osc1.stop(now + 0.7);
+
+        // mid shimmer
+        const osc2 = audioCtx.createOscillator();
+        const g2 = audioCtx.createGain();
+        osc2.type = 'triangle'; osc2.frequency.setValueAtTime(520, now + 0.05);
+        g2.gain.setValueAtTime(0.0001, now);
+        g2.gain.linearRampToValueAtTime(0.08, now + 0.06);
+        g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        osc2.connect(g2); g2.connect(audioCtx.destination);
+        osc2.start(now + 0.02); osc2.stop(now + 0.62);
+
+        // short noise burst via buffer (light click) for emphasis
+        const bufferSize = audioCtx.sampleRate * 0.06;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for(let i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * Math.exp(-i/bufferSize*3); }
+        const noise = audioCtx.createBufferSource();
+        const ng = audioCtx.createGain();
+        noise.buffer = buffer;
+        ng.gain.setValueAtTime(0.08, now + 0.03);
+        ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+        noise.connect(ng); ng.connect(audioCtx.destination);
+        noise.start(now + 0.03);
+        noise.stop(now + 0.18);
+
+      }catch(e){ /* audio may be blocked on some mobile browsers */ }
+    }
+
+    // Handle awaken click
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('iname').value.trim();
+      const phrase = document.getElementById('iphrase').value.trim();
+      if(!name || !phrase){
+        alert('The Gate demands both name and sigil phrase.');
+        return;
+      }
+
+      // play sound
+      playAwakenSound();
+
+      // flash + glow effect
+      flash.classList.add('show');
+      awaken.classList.add('btnGlow');
+      credit.classList.add('glow');
+
+      // change title and show temporary "activated" status on button then revert
+      const oldText = awaken.textContent;
+      awaken.textContent = 'Seal Activated ⚡';
+      awaken.disabled = true;
+
+      setTimeout(()=>{
+        flash.classList.remove('show');
+      }, 600);
+
+      // small card pop (micro animation)
+      document.querySelector('.card').animate([
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-8px) scale(1.01)' },
+        { transform: 'translateY(0)' }
+      ], { duration: 700, easing: 'cubic-bezier(.2,.9,.2,1)' });
+
+      // after effect, revert back (but keep credit glowing)
+      setTimeout(()=>{
+        awaken.textContent = oldText;
+        awaken.disabled = false;
+        awaken.classList.remove('btnGlow');
+      }, 2600);
+
+      // NOTE: No data is sent anywhere — this is a local, client-side animation only.
+    });
+
+    // make credit clickable to show hidden signature info (discourages edits)
+    credit.addEventListener('click', function(){
+      alert('Created and designed by Ritesh Kale | © 2025 All Rights Reserved\n\nThis signature is also included as a hidden comment inside the page source.');
+    });
+
+    // Accessibility: allow Enter key on inputs to trigger form (native)
+    document.getElementById('iname').addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('iphrase').focus(); } });
+
+  </script>
+</body>
+</html>
